@@ -1,45 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Filmes from './components/Filmes';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import Filmes, { IFilmes } from './components/Filmes';
 
 export default function App() {
-  const filmes = [
-  {
-    'titulo': 'O Enigma de outro mundo',
-    'diretor': 'John Carpenter',
-    'origem': 'Estados Unidos',
-    'ano': 1982,
-    'cartaz': require('./assets/the-thing.jpg')
-  },
-  {
-    'titulo': 'Janela Indiscreta',
-    'diretor': 'Alfred Hitchcock',
-    'origem': 'Estados Unidos',
-    'ano': 1954,
-    'cartaz': require('./assets/janela-indiscreta.jpg')
-  },
-  {
-    'titulo': 'Rashomon',
-    'diretor': 'Akira Kurosawa',
-    'origem': 'Japão',
-    'ano': 1950,
-    'cartaz': require('./assets/rashomon.jpg')
+  const API = "https://www.omdbapi.com/?apikey=9e5a67ef"
+  const [titulo, setTitulo] = useState('');
+  const [filmes, setFilmes] = useState<IFilmes>();
+
+  async function getFilmes() {
+    try {
+      let res = await fetch(`$(API)&t=$(titulo)`);
+      let data = await res.json();
+      setFilmes(data.Search || []);
+    } catch (error) {
+      console.error(error)
+    }
   }
-]
 
   return (
     <SafeAreaView>
       <ScrollView>
-          {filmes.map((item, index) => (
-            <Filmes key={index} 
-            titulo={item.titulo} 
-            diretor={item.diretor}
-            origem={item.origem}
-            ano={item.ano}
-            cartaz={item.cartaz}
+      <TextInput value={titulo} onChangeText={setTitulo} placeholder="Digite o título do filme"></TextInput>
+      <Button title='pesquisar' onPress={getFilmes}/>
+            <Filmes 
+            Title={filmes?.Title}
+            Year={filmes?.Year}
+            Poster={filmes?.Poster}
             />
-          ))}
       </ScrollView>
     </SafeAreaView>
   );

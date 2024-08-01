@@ -1,21 +1,19 @@
 import { Text, Image, View, StyleSheet } from 'react-native';
 
-interface FilmeProps {
-    titulo: string,
-    diretor: string,
-    origem: string,
-    ano: number,
-    cartaz: string
+export interface IFilmes {
+  Title?: string,
+  Year?: string,
+  imdbID?: string,
+  Type?: string,
+  Poster?: string
 }
 
-const Filmes = (filmes: any) => {
+const Filmes = (filmes: IFilmes) => {
     return (
         <View style={styles.card}>
-            <Text style={styles.title}>{filmes.titulo}</Text>
-            <Text style={styles.info}>Dir. {filmes.diretor}</Text>
-            <Text style={styles.info}>Origem: {filmes.origem}</Text>
-            <Text style={styles.info}>Ano: {filmes.ano}</Text>
-            <Image source={filmes.cartaz} style={styles.image}/>
+            <Text style={styles.title}>{filmes.Title}</Text>
+            <Text style={styles.info}>Ano: {filmes.Year}</Text>
+            <Image source={{'uri': filmes.Poster}} style={styles.image}/>
         </View>
     )
     }
